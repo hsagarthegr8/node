@@ -1,83 +1,148 @@
-const prompt = require('readline-sync')
-const mongoClient = require('mongodb').MongoClient
-const url = "mongodb://localhost:27017/"
+const prompt = require("readline-sync");
+const mongoClient = require("mongodb").MongoClient;
+const url = "mongodb://localhost:27017/";
 
-let options = ['Insert Data', 'Display All Data', 'Find by ID', 'Delete by ID', 'Update by ID']
-let choice = prompt.keyInSelect(options, 'Select your option')
-
-while (choice != -1) {
-    
-    console.log(choice)
-    switch (choice) {
-        case 0:
-            console.log("Insert")
-            //insert()
-            break
-        case 1:
-            displayAll()
-            console.log("DIsplay")
-            setTimeout(()=>{},2000)
-            break
-        case 2:
-            console.log("find")
-            setTimeout
-            //findById()
-            break
-        case 3:
-        console.log("delete")
-            //deleteById()
-            break
-        case 4:
-        console.log("update")
-            //updateById()
-            break
-    }
-    choice = prompt.keyInSelect(options, 'Select your option')
+function home() {
+	let options = [
+		"Insert Data",
+		"Display All Data",
+		"Find by ID",
+		"Delete by ID",
+		"Update by ID"
+	];
+	let choice = prompt.keyInSelect(options, "Select your option");
+	switch (choice) {
+		case 0:
+			insertUtil();
+			break;
+		case 1:
+			displayAll();
+			break;
+		case 2:
+			findByIdUtil();
+			break;
+		case 3:
+			deleteByIdUtil();
+			break;
+		case 4:
+			updateByIdUtil();
+			break;
+		case -1:
+			console.log("Byeeeee...");
+			break;
+	}
 }
 
-
-function insert() {
-    let id = prompt.questionInt("Enter Product Id: ")
-    let name = prompt.questionInt("Enter Product Name:")
-    let cost = prompt.questionFloat("Enter Product Cost: ")
-    let desc = prompt.question("Enter Product Description: ")
-    insertIntoDb(id, name, cost, desc)
+function insertUtil() {
+	let id = prompt.questionInt("Enter Product Id: ");
+	let name = prompt.question("Enter Product Name:");
+	let cost = prompt.questionFloat("Enter Product Cost: ");
+	let desc = prompt.question("Enter Product Description: ");
+	insert(id, name, cost, desc);
 }
 
-function insertIntoDb(id, name, cost, desc) {
-    mongoClient.connect(url, (err, mongo) => {
-        if (err) throw err
-        let db = mongo.db('hsagarthegr8')
-        let myObj = { pId: id, pName: name, pCost: cost, pDesc: desc }
-        db.collection("node").insertOne(myObj, (err, res) => {
-            if (err) throw err
-            console.log("1 document inserted")
-            mongo.close()
-        })
-    })
+function insert(id, name, cost, desc) {
+	mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
+		if (err) throw err;
+		let db = mongo.db("hsagarthegr8");
+		let myObj = { pId: id, pName: name, pCost: cost, pDesc: desc };
+		db.collection("node").insertOne(myObj, (err, res) => {
+			if (err) throw err;
+			console.log("1 Document Inserted");
+			mongo.close();
+			home();
+		});
+	});
 }
 
 function displayAll() {
-    mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
-        if (err) throw err
-        let db = mongo.db('hsagarthegr8')
-        db.collection("node").find({}, { _id: 0 }).toArray((err, res) => {
-            if (err) throw err
-            console.log(res)
-            mongo.close()
-        })
-    })
+	mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
+		if (err) throw err;
+		let db = mongo.db("hsagarthegr8");
+		db.collection("node").find({}).toArray((err, res) => {
+			if (err) throw err;
+			console.log(
+				res.map(obj => {
+					return {
+						ProductId: obj.pId,
+						ProductName: obj.pName,
+						ProductCost: obj.pCost,
+						ProductDescription: obj.pDesc
+					};
+				})
+			);
+			mongo.close();
+			home();
+		});
+	});
 }
 
-function findById() {
-
+function findByIdUtil() {
+	let id = prompt.questionInt("Enter ID to search: ");
+	findById(id);
 }
 
-function deleteById() {
-
+function findById(id) {
+	mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
+		if (err) throw err;
+		let db = mongo.db("hsagarthegr8");
+		db.collection("node").find({ pId: id }).toArray((err, res) => {
+			if (err) throw err;
+			console.log(
+				res.map(obj => {
+					return {
+						ProductId: obj.pId,
+						ProductName: obj.pName,
+						ProductCost: obj.pCost,
+						ProductDescription: obj.pDesc
+					};
+				})
+			);
+			mongo.close();
+			home();
+		});
+	});
 }
 
-function updateById() {
-
+function deleteByIdUtil() {
+	let id = prompt.questionInt("Enter ID to delete: ");
+	deleteById(id);
+}
+function deleteById(id) {
+	mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
+		if (err) throw err;
+		let db = mongo.db("hsagarthegr8");
+		let query = { pId: id };
+		db.collection("node").deleteOne(query, (err, obj) => {
+			if (err) throw err;
+			console.log("1 Document Deleted");
+			mongo.close();
+			home();
+		});
+	});
 }
 
+function updateByIdUtil() {
+	let id = prompt.questionInt("Enter ID to update: ");
+	let pName = prompt.question("Enter New Product Name:");
+	let pCost = prompt.questionFloat("Enter New Product Cost: ");
+	let pDesc = prompt.question("Enter New Product Description: ");
+	updateById(id, pName, pCost, pDesc);
+}
+
+function updateById(id, pName, pCost, pDesc) {
+	mongoClient.connect(url, { useNewUrlParser: true }, (err, mongo) => {
+		if (err) throw err;
+		let db = mongo.db("hsagarthegr8");
+		let query = { pId: id };
+		let newValues = { $set: { pName: pName, pCost: pCost, pDesc: pDesc } };
+		db.collection("node").updateOne(query, newValues, (err, res) => {
+			if (err) throw err;
+			console.log("1 Document Updated");
+			mongo.close();
+			home();
+		});
+	});
+}
+
+home();
