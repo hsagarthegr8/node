@@ -1,0 +1,62 @@
+[
+    {
+        "_id": "5b756080d1871e1518409723",
+        "empId": 1001,
+        "empName": "Jack",
+        "empSalary": 40000,
+        "empAddress": {
+            "city": "Pune",
+            "state": "Maharashtra"
+        }
+    },
+    {
+        "_id": "5b756080d1871e1518409724",
+        "empId": 1002,
+        "empName": "Jill",
+        "empSalary": 42000,
+        "empAddress": {
+            "city": "Pune",
+            "state": "Maharashtra"
+        }
+    },
+    {
+        "_id": "5b756080d1871e1518409725",
+        "empId": 1003,
+        "empName": "Sebastian",
+        "empSalary": 14000,
+        "empAddress": {
+            "city": "Agra",
+            "state": "Uttar Pradesh"
+        }
+    },
+    {
+        "_id": "5b756080d1871e1518409726",
+        "empId": 1004,
+        "empName": "Jessica",
+        "empSalary": 30000,
+        "empAddress": {
+            "city": "Lucknow",
+            "state": "Uttar Pradesh"
+        }
+    },
+    {
+        "_id": "5b756080d1871e1518409727",
+        "empId": 1005,
+        "empName": "Terena",
+        "empSalary": 45000,
+        "empAddress": {
+            "city": "San Diego",
+            "state": "California"
+        }
+    },
+    {
+        "_id": "5b756080d1871e1518409728",
+        "empId": 1006,
+        "empName": "Aadel",
+        "empSalary": 50000,
+        "empAddress": {
+            "city": "San Jose",
+            "state": "California"
+        }
+    }
+]

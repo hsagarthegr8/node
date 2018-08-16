@@ -1,0 +1,15 @@
+td, th, caption {
+    text-align: center;
+}
+
+table {
+    margin-top: 2em;
+}
+
+input {
+    margin: 0.5em;
+}
+
+.fb {
+    margin: 0.5em;
+}

@@ -1,0 +1,57 @@
+<div class="container">
+  <h3>Filter by State</h3>
+  <form (submit)='findByStates()' class="form-inline">
+      <input type="text" class="form-control" name="query" [(ngModel)]="query" placeholder="Enter  State">
+      <button type="submit" class="btn btn-success float-right">Filter</button>
+  </form>
+
+  <table class="table table-bordered" *ngIf='employees.length'>
+    <caption>Employees</caption>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Salary</th>
+        <th colspan="2">Address</th>
+        <th>Action</th>
+      </tr>
+      <tr>
+        <th colspan="3"></th>
+        <th>City</th>
+        <th>State</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor='let emp of employees'>
+        <td>{{emp.empId}}</td>
+        <td>{{emp.empName}}</td>
+        <td>{{emp.empSalary}}</td>
+        <td>{{emp.empAddress.city}}</td>
+        <td>{{emp.empAddress.state}}</td>
+        <td><button class="btn btn-info" (click)='update(emp)'>Update</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <h3 *ngIf='isUpdating'>Update Employee</h3>
+  <h3 *ngIf='!isUpdating'>Add Employee </h3>
+  <form [formGroup]="empForm" (submit)='submitForm()'>
+    <div class="form-inline">
+      <input type="number" class="form-control" name="empId" [readonly] = 'isUpdating'
+      formControlName="empId" placeholder="Enter Employee ID">
+      <input type="text" class="form-control" name="empName" 
+      formControlName="empName" placeholder="Enter Employee Name">
+      <input type="number" class="form-control" name="empSalary" 
+      formControlName="empSalary" placeholder="Enter Employee Salary">
+      <input type="text" class="form-control" name="empCity" 
+      formControlName="empCity" placeholder="Enter Employee City">
+      <input type="text" class="form-control" name="empState" 
+      formControlName="empState" placeholder="Enter Employee State">
+    </div>
+    <button type="submit" class="btn btn-success float-right fb" [disabled]="!empForm.valid">Submit</button>
+    <button type="reset" class="btn btn-warning float-right fb" (click)='reset()'>Reset</button>
+
+  </form>
+  
+</div>
